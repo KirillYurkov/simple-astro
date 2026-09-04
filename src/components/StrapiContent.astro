@@ -1,0 +1,239 @@
+---
+// src/components/StrapiContent.astro
+const { content } = Astro.props;
+
+// Базовый URL для локальных медиафайлов Strapi 5
+const STRAPI_URL = "http://localhost:1337";
+
+interface TextChild {
+  type: "text";
+  text: string;
+  bold?: boolean;
+  italic?: boolean;
+  underline?: boolean;
+  strikethrough?: boolean;
+}
+
+interface Block {
+  type: "paragraph" | "heading" | "list" | "quote" | "code" | "image";
+  level?: number;
+  format?: "ordered" | "unordered";
+  children?: any[];
+  image?: any;
+}
+
+// Вспомогательная функция для проверки, является ли ссылка картинкой
+const isImageProps = (url: string) => {
+  if (!url) return false;
+  const extensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".webp",
+    ".svg",
+    ".avif",
+  ];
+  return extensions.some(
+    (ext) =>
+      url.toLowerCase().endsWith(ext) || url.toLowerCase().includes(ext + "?"),
+  );
+};
+---
+
+{
+  Array.isArray(content) &&
+    content.map((block: Block) => {
+      // 1. Абзацы (могут содержать текст, обычные ссылки и ссылки-картинки)
+      if (block.type === "paragraph") {
+        return (
+          <p class="strapi-p">
+            {(block.children || []).map((child: any) => {
+              // Если внутри абзаца сидит ссылка
+              if (child.type === "link") {
+                const rawUrl = child.url || "";
+                const imageUrl = rawUrl.startsWith("/")
+                  ? `${STRAPI_URL}${rawUrl}`
+                  : rawUrl;
+
+                // 🌟 УМНАЯ ПРОВЕРКА: Если ссылка ведет на картинку, рендерим её как ИЗОБРАЖЕНИЕ
+                if (isImageProps(rawUrl)) {
+                  return (
+                    <span class="strapi-inline-image-wrapper">
+                      <img
+                        src={imageUrl}
+                        alt="Изображение из текста"
+                        class="strapi-img"
+                        loading="lazy"
+                      />
+                    </span>
+                  );
+                }
+
+                // Если это обычная ссылка на сайт
+                return (
+                  <a
+                    href={imageUrl}
+                    class="strapi-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {(child.children || []).map(
+                      (linkText: TextChild) => linkText.text || rawUrl,
+                    )}
+                  </a>
+                );
+              }
+
+              // Обычный текст с форматированием
+              const renderedText = child.text || "";
+              if (child.bold) return <strong>{renderedText}</strong>;
+              if (child.italic) return <em>{renderedText}</em>;
+              if (child.underline) return <u>{renderedText}</u>;
+              if (child.strikethrough) return <s>{renderedText}</s>;
+              return renderedText;
+            })}
+          </p>
+        );
+      }
+
+      // 2. Изображения (когда вставили как отдельный блок в CMS)
+      if (block.type === "image" && block.image) {
+        const imgData = block.image;
+        const imageUrl = imgData.url?.startsWith("/")
+          ? `${STRAPI_URL}${imgData.url}`
+          : imgData.url;
+        const altText =
+          imgData.alternativeText || imgData.name || "Изображение";
+
+        return (
+          <figure class="strapi-figure">
+            <img
+              src={imageUrl}
+              alt={altText}
+              width={imgData.width}
+              height={imgData.height}
+              class="strapi-img"
+              loading="lazy"
+            />
+            {imgData.caption && (
+              <figcaption class="strapi-caption">{imgData.caption}</figcaption>
+            )}
+          </figure>
+        );
+      }
+
+      // 3. Заголовки (H1 - H6)
+      if (block.type === "heading") {
+        const HeadingTag = `h${block.level || 2}` as any;
+        return (
+          <HeadingTag class={`strapi-h${block.level || 2}`}>
+            {(block.children || []).map((child) => child.text)}
+          </HeadingTag>
+        );
+      }
+
+      // 4. Списки
+      if (block.type === "list") {
+        const ListTag = block.format === "ordered" ? "ol" : "ul";
+        return (
+          <ListTag class="strapi-list">
+            {(block.children || []).map((listItem) => (
+              <li class="strapi-list-item">
+                {(listItem.children || []).map((child: any) => child.text)}
+              </li>
+            ))}
+          </ListTag>
+        );
+      }
+
+      // 5. Цитаты
+      if (block.type === "quote") {
+        return (
+          <blockquote class="strapi-quote">
+            {(block.children || []).map((child) => child.text)}
+          </blockquote>
+        );
+      }
+
+      // 6. Блоки кода
+      if (block.type === "code") {
+        return (
+          <pre class="strapi-code">
+            <code>{(block.children || []).map((child) => child.text)}</code>
+          </pre>
+        );
+      }
+
+      return null;
+    })
+}
+<script>
+  import "../components/Search/search.js";
+</script>
+<style is:global>
+  .blog-page__body {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Стили для параграфов */
+  .strapi-p {
+    font-family: var(--font1);
+    font-size: 18px;
+    line-height: 170%;
+    color: #85859b; /* Цвет как у твоего класса .desc */
+    margin-bottom: 1.5rem;
+  }
+
+  /* Стили для ссылок */
+  .strapi-link {
+    color: #7875fe; /* Цвет твоей фиолетовой кнопки */
+    text-decoration: underline;
+    font-weight: 500;
+  }
+  .strapi-link:hover {
+    color: var(--active);
+  }
+
+  /* Стили для картинок */
+  .strapi-figure,
+  .strapi-inline-image-wrapper {
+    display: block;
+    margin: 2.5rem 0;
+    width: 100%;
+  }
+
+  .strapi-img {
+    max-width: 200px;
+    height: 200px;
+    display: block;
+    float: left;
+    margin-right: 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .strapi-caption {
+    margin-top: 0.75rem;
+    font-size: 14px;
+    color: #b5b5bd;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* Стили для заголовков внутри статьи */
+  .strapi-h2,
+  .strapi-h3 {
+    color: var(--title-h2);
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+  .strapi-h2 {
+    font-size: 32px;
+  }
+  .strapi-h3 {
+    font-size: 24px;
+  }
+</style>

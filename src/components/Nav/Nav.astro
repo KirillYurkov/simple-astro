@@ -1,0 +1,33 @@
+---
+import "./_nav.scss";
+import { menu } from "@/data/data";
+interface Props {
+  class?: string;
+  navLabel?: string;
+}
+const { class: additionalClass = "", navLabel = "Главное" } = Astro.props;
+const currentPath = Astro.url.pathname;
+const isMobile = additionalClass.includes("header-nav--mobile");
+const navId = isMobile ? "main-mobile-nav" : "main-nav";
+---
+
+<nav class={`nav ${additionalClass}`} aria-label={navLabel} id={navId}>
+  <ul class="header-nav__list">
+    {
+      menu.map(({ label, href }) => {
+        let isActive =
+          href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+        return (
+          <li class="header-nav__item">
+            <a
+              href={href}
+              class={`header-nav__link ${isActive ? "header-nav__link--active" : ""}`.trim()}
+            >
+              {label}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>

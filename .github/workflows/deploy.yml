@@ -1,0 +1,56 @@
+name: Deploy Astro Site to Sprinthost
+
+on:
+  push:
+    branches:
+      - main
+  repository_dispatch:
+    types: [wordpress_publish]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Download posts.json from Sprinthost (No Cache)
+        run: |
+          curl -f -s -H "Cache-Control: no-cache" -H "Pragma: no-cache" -H "User-Agent: Mozilla/5.0" "http://kirilltest1984online.ru/panel/posts.json" -o posts.json
+          echo "=== ОТЛАДКА: ПЕРВЫЕ СТРОКИ СКАЧАННОГО ФАЙЛА ==="
+          head -c 200 posts.json
+          echo -e "\n==============================================="
+
+      - name: Clean images folder before build
+        run: rm -rf dist/images
+
+      - name: Build Astro Project
+        run: npx astro build
+        env:
+          NODE_ENV: production
+
+      - name: Sync Files via FTP to Sprinthost
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: kirilltest1984online.ru
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist/
+          server-dir: domains/kirilltest1984online.ru/public_html/
+          force: true
+          overwrite: true
+          timeout: 600000
+          state-name: .ftp-deploy-domain-sync.json
+          exclude: |
+            **/panel/**
+            panel/**

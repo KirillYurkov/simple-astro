@@ -1,0 +1,24 @@
+---
+import Footer from "@/components/Footer/Footer.astro";
+import Head from "@/components/Head.astro";
+import Header from "@/components/Header/Header.astro";
+import SpriteGenerator from "@/components/SpriteGenerator/SpriteGenerator.astro";
+let { title = "Simple", desc = "Добро пожаловать на Simple" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <Head title={title} desc={desc} />
+  </head>
+  <body>
+    <Header />
+    <main class="main">
+      <div class="wrapper">
+        <slot />
+      </div>
+    </main>
+    <Footer />
+    <SpriteGenerator/>
+  </body>
+</html>

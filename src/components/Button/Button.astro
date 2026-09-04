@@ -1,0 +1,26 @@
+---
+import "./_button.scss";
+interface Props {
+  label: string;
+  href?: string;
+  class?: string;
+  type?: "button" | "submit" | "reset";
+}
+const {
+  label = "",
+  href = "",
+  type = "button",
+  class: additionalClass = "",
+  ...rest
+} = Astro.props;
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  href={href || undefined}
+  type={href ? undefined : type}
+  class={`btn ${additionalClass}`.trim()}
+  {...rest}
+>
+  <span>{label}</span>
+</Tag>

@@ -1,0 +1,193 @@
+//constants,functions уже доступны т.к подкючены выше в main.scss
+@use "constants.scss" as *;
+@use "functions.scss" as *;
+
+@mixin fluid-text($max: 48, $min: 16) {
+  font-size: fluid($max, $min);
+}
+
+@mixin hide {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@mixin show {
+  opacity: 1;
+  visibility: visible;
+}
+
+@mixin flex-center($isInline: false) {
+  @if ($isInline) {
+    display: inline-flex;
+  } @else {
+    display: flex;
+  }
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin abs-cover {
+  position: absolute;
+  inset: 0;
+}
+@mixin abs-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+@mixin abs-x {
+  position: absolute;
+  left: 50%;
+  translate: -50%;
+}
+@mixin abs-y {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+}
+
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  clip-path: inset(100%) !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+}
+
+@mixin focus-visible {
+  outline: 2px dashed aqua;
+  outline-offset: 4px;
+  transition-duration: 0s !important;
+}
+
+@mixin disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+//HOVER
+@mixin hover($hasActiveEffectOnMobile: false) {
+  @media (any-hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+  @if ($hasActiveEffectOnMobile) {
+    @media (any-hover: none) {
+      &:active {
+        @content;
+      }
+    }
+  }
+}
+
+//fonts
+@mixin font-face($font, $font-name, $weight: 400, $style: normal) {
+  @font-face {
+    font-family: "#{$font}";
+    src: url("/src/fonts/#{$font-name}.woff2") format("woff2");
+    font-weight: $weight;
+    font-style: $style;
+    font-display: swap;
+  }
+}
+
+/// Миксин для стилизации иконок через компонент MyIcon.
+@mixin icons(
+  $main-color,
+  $bg-color,
+  $main-hover: null,
+  $bg-hover: null,
+  $width,
+  $height
+) {
+  --main-color: #{$main-color};
+  --bg-color: #{$bg-color};
+
+  //Если иконка простая то цвет иконки будет наследоваться о цвета родителя
+  svg {
+    display: inline-flex;
+    width: $width;
+    height: $height;
+    fill: currentColor;
+
+    use {
+      stroke: none !important;
+      transition: all 0.3s;
+    }
+  }
+
+  @if ($main-hover or $bg-hover) {
+    svg {
+      fill: none;
+    }
+    @include hover {
+      @if ($main-hover!=null) {
+        --main-color: #{$main-hover};
+      }
+      @if ($bg-hover!=null) {
+        --bg-color: #{$bg-hover};
+      }
+    }
+  }
+}
+
+//Миксин состояния элементов
+@mixin states(
+  $color:null,
+  $bg-color:null,
+  $hover-color: null,
+  $hover-bg: null,
+  $focus-color: null,
+  $focus-bg: null,
+  $active-color: null,
+  $active-bg: null,
+  $hasActiveEffectOnMobile: false
+) {
+  color: $color;
+  background-color: $bg-color;
+
+  @if ($hover-color or $hover-bg) {
+    @media (any-hover: hover) {
+      &:hover {
+        color: $hover-color;
+        background-color: $hover-bg;
+      }
+    }
+  }
+  //Десктопный клик
+  @if ($active-color or $active-bg) {
+    @media (any-hover: hover) {
+      &:active {
+        color: $active-color;
+        background-color: $active-bg;
+      }
+    }
+  }
+
+  @if ($hasActiveEffectOnMobile and ($active-color or $active-bg)) {
+    @media (any-hover: none) {
+      &:active {
+        color: $active-color;
+        background-color: $active-bg;
+      }
+    }
+  }
+  @if ($focus-color or $focus-bg) {
+    &:focus-visible {
+      color: $focus-color;
+      background-color: $focus-bg;
+    }
+  }
+}

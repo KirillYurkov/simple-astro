@@ -1,0 +1,5 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
+  <!-- ИСПРАВЛЕНО: Две палочки крестика сделаны через прямоугольники с fill, а не stroke! -->
+  <rect x="19.071" y="3.514" width="2" height="22" rx="1" transform="rotate(45 19.071 3.514)" fill="#ffffff" />
+  <rect x="20.485" y="19.071" width="2" height="22" rx="1" transform="rotate(135 20.485 19.071)" fill="#ffffff" />
+</svg>

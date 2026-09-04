@@ -1,0 +1,15 @@
+---
+import './_burger.scss';
+const { class: classes = "" } = Astro.props;
+---
+
+<button
+  class={`burger ${classes}`}
+  aria-label="Открыть меню"
+  aria-expanded="false"
+  aria-controls="main-mobile-nav"
+>
+  <span></span>
+</button>
+
+<script src="./burger.js"></script>

@@ -1,0 +1,63 @@
+---
+import "./_result.scss";
+import { Image } from "astro:assets";
+import resultImg1 from "@/assets/img/result/card1.png";
+import resultImg2 from "@/assets/img/result/card2.png";
+import resultImg3 from "@/assets/img/result/card3.png";
+import resultImg4 from "@/assets/img/result/card4.png";
+const resultImages = [resultImg1, resultImg2, resultImg3];
+const resultCards = [
+  {
+    alt: "result1",
+    label: "V.1",
+    desc: "Результат вашего обучения",
+  },
+  {
+    alt: "result2",
+    label: "V.2",
+    desc: "Результат вашего обучения",
+  },
+  {
+    alt: "result3",
+    label: "V.3",
+    desc: "Результат вашего обучения",
+  },
+];
+---
+
+<section class="result">
+  <div class="result__container container">
+    <div class="result__header">
+      <ul class="result__header-list">
+        {
+          resultCards.map(({ alt, label, desc }, i) => (
+            <li class="result__header-item">
+              <article class="result-article">
+                <Image
+                  src={resultImages[i]}
+                  alt={alt}
+                  class="result-article__img"
+                />
+                <div class="result-article__text">
+                  <h3 class="result-article__title">{label}</h3>
+                  <p class="result-article__desc desc">{desc}</p>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="result-content">
+    <div class="result-content__img">
+        <Image src={resultImg4} alt="resultImg4"/>
+    </div>
+    <div class="result-content__text">
+        <h2 class="result-content__title title--h2">Максимальная белизна</h2>
+        <p class="result-content__desc desc">Для повышения белизны, гладкости и мягкости в состав бумажной массы вводят белые минеральные вещества: мел, тальк, каолин и др. Эта операция называется наполнением.
+</p>
+        <p class="result-content__desc desc">Отлив бумажного листа осуществляют на бумагоделательной машине, важнейшей частью которой является непрерывно движущаяся (как транспортер) металлическая или капроновая сетка.</p>
+    </div>
+  </div>
+  </div>
+</section>

@@ -1,0 +1,35 @@
+---
+import "./_products.scss";
+import { Image } from "astro:assets";
+import MyIcon from "@/components/SpriteGenerator/MyIcon.astro";
+import { productsData } from "@/data/products";
+const firstProduct = Object.values(productsData);
+console.log(firstProduct);
+---
+
+<section class="products container">
+  <ul class="products__list">
+    {
+      firstProduct.map(([product]) => (
+        <li class="products__item">
+          <article class="products-card">
+            <Image
+              src={product.src}
+              alt={product.title}
+              class="products-card__img"
+            />
+            <h3 class="products-card__title">{product.title}</h3>
+            <span class="products-card__subtitle subtitle">
+              Тираж: от {product.count} штук
+            </span>
+            <p class="products-card__desc desc">Сделано из крафт-бумаги или плотного картона. Упаковки имеют различные формы и расцветки, изготовим форму под заказ.</p>
+            <a href="/products/" class="products-card__link">
+            <span>Подробнее</span>
+            <MyIcon name="arrow"/>
+            </a>
+          </article>
+        </li>
+      ))
+    }
+  </ul>
+</section>

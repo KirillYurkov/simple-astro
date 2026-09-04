@@ -1,0 +1,18 @@
+---
+import "@/assets/scss/main.scss";
+//Объявление дефолтных значений если станица забудет передать эти пропсы!!!
+const { title,desc } = Astro.props;
+---
+
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <script>
+      import "@/assets/js/main.js";
+    </script>
+    <meta name="description" content={desc} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+

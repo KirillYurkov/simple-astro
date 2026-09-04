@@ -1,0 +1,20 @@
+---
+import './_promo.scss';
+import promo from '@/assets/img/promo.png';
+import { Image } from 'astro:assets';
+import Button from '@/components/Button/Button.astro';
+---
+<section class="promo">
+    <div class="promo__container container">
+
+        <div class="promo__text">
+            
+            <h2 class="promo__title title--h2">Simple скетчбук</h2>
+            <p class="promo__desc desc">80 листов, твердая обложка, бумага  Fabriano 200 г/м2. Подойдет и для графики и для акварели. Для самых смелых творческих замыслов!</p>
+            <Button href="#" label='Каталог' class="promo__btn" />
+        </div>
+        <div class="promo__img">
+            <Image src={promo} alt="Скетчбук"/>
+        </div>
+    </div>
+</section>

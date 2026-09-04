@@ -1,0 +1,98 @@
+---
+import "./_blog-article.scss";
+import Layout from "@/layouts/Layout.astro";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { downloadImage } from "../../../download-image.js";
+
+const IMAGES_DIR = path.join(process.cwd(), "dist", "images", "blog");
+
+export async function getStaticPaths() {
+  // Пути объявляем ВНУТРИ getStaticPaths — Astro выделяет её в отдельный чанк
+  const POSTS_JSON_PATH = path.join(process.cwd(), "posts.json");
+
+  if (!fs.existsSync(POSTS_JSON_PATH)) {
+    console.error("[getStaticPaths] posts.json не найден!");
+    return [];
+  }
+
+  let posts: any[];
+
+  try {
+    const raw = fs.readFileSync(POSTS_JSON_PATH, "utf-8");
+    const trimmed = raw.trimStart();
+
+    if (trimmed.startsWith("<") || trimmed.startsWith("<!DOCTYPE")) {
+      console.error("[getStaticPaths] posts.json содержит HTML, а не JSON!");
+      console.error(trimmed.slice(0, 200));
+      return [];
+    }
+
+    posts = JSON.parse(raw);
+  } catch (err) {
+    console.error("[getStaticPaths] Ошибка парсинга posts.json:", err);
+    return [];
+  }
+
+  if (!Array.isArray(posts) || posts.length === 0) {
+    console.warn("[getStaticPaths] Массив постов пуст");
+    return [];
+  }
+
+  return posts.map((post: any) => ({
+    params: { id: String(post.id) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+
+const pageTitle = post?.title?.rendered
+  ? post.title.rendered.replace(/<[^>]+>/g, "")
+  : "Статья";
+const pageDesc = post?.excerpt?.rendered
+  ? post.excerpt.rendered.replace(/<[^>]*>/g, "")
+  : "Описание статьи";
+
+let htmlContent = post?.content?.rendered || "";
+htmlContent = htmlContent.replace(/<img([^>]*)style="[^"]*"([^>]*)>/gi, '<img$1$2>');
+if (htmlContent) {
+  const imgRegex = /<img([^>]*)src=["'](https?:\/\/[^"']+)["']([^>]*)>/gi;
+  let match;
+
+  while ((match = imgRegex.exec(htmlContent)) !== null) {
+    const fullTag = match[0];
+    const remoteUrl = match[2];
+
+    if (remoteUrl.startsWith("/images/")) continue;
+
+    try {
+      const urlObj = new URL(remoteUrl);
+      const filename = path.basename(urlObj.pathname);
+
+      if (!filename) continue;
+
+      const localSavePath = path.join(IMAGES_DIR, filename);
+
+      await downloadImage(remoteUrl, localSavePath);
+
+      const localUrl = `/images/blog/${filename}`;
+      const newTag = fullTag.replace(remoteUrl, localUrl);
+      htmlContent = htmlContent.replace(fullTag, newTag);
+
+      console.log(`[img] OK: ${filename}`);
+    } catch (err: any) {
+      console.warn(`[img] FAIL: ${remoteUrl} — ${err.message}`);
+    }
+  }
+}
+---
+
+<Layout title={`Simple | ${pageTitle}`} desc={pageDesc}>
+  <div class="block-page container">
+    <h1 class="blog-page__title title--h1" set:html={pageTitle} />
+    <div class="block-page__content">
+      <div class="blog-page__body" set:html={htmlContent} />
+    </div>
+  </div>
+</Layout>

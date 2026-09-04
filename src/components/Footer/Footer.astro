@@ -1,0 +1,38 @@
+---
+import "./_footer.scss";
+import MyIcon from "@/components/SpriteGenerator/MyIcon.astro";
+import { Icon } from "astro-icon/components";
+const socials = [
+  { name: "facebook", src: "!#" },
+  { name: "twitter", src: "#" },
+  { name: "insta", src: "#" },
+  { name: "youtube", src: "#" },
+];
+---
+
+<footer class="footer">
+  <div class="footer__container container">
+    <span class="footer__logo-wrapper">
+
+      <a href="#" class="footer__logo">
+        <img src="/logo-footer.svg" alt="logo" />
+      </a>
+    </span>
+    <div class="footer-socials">
+      <ul class="footer-socials__list">
+        {
+          socials.map(({ name, src }) => (
+            <li class="footer-socials__item">
+              <a href={src} class="footer-socials__link">
+                <MyIcon name={name} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="footer__copy">
+    <small>Simple <span> &reg;</span> 2026</small>
+  </div>
+</footer>

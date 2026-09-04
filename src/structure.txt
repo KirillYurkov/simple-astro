@@ -1,0 +1,90 @@
+src/
+├── assets
+│   ├── icons
+│   │   ├── socials
+│   │   │   ├── facebook.svg
+│   │   │   ├── insta.svg
+│   │   │   ├── twitter.svg
+│   │   │   └── youtube.svg
+│   │   ├── alarm.svg
+│   │   ├── bookmark.svg
+│   │   ├── comments.svg
+│   │   ├── cross.svg
+│   │   ├── dislikes.svg
+│   │   ├── login.svg
+│   │   └── search.svg
+│   ├── img
+│   │   ├── products
+│   │   │   ├── bag.png
+│   │   │   ├── card4.png
+│   │   │   ├── case.png
+│   │   │   ├── other.png
+│   │   │   └── package.png
+│   │   ├── result
+│   │   │   ├── card1.png
+│   │   │   ├── card2.png
+│   │   │   └── card3.png
+│   │   ├── book-small.png
+│   │   ├── book.png
+│   │   ├── gallery-1.png
+│   │   ├── gallery-2.png
+│   │   ├── gallery-3.png
+│   │   ├── gallery-4.png
+│   │   ├── hero.png
+│   │   ├── video-cover-1.jpg
+│   │   └── video-cover-2.jpg
+│   ├── js
+│   │   ├── components
+│   │   ├── helpers
+│   │   │   ├── format-date.js
+│   │   │   ├── pluralize.js
+│   │   │   └── switch-theme.js
+│   │   ├── utils
+│   │   └── main.js
+│   ├── scss
+│   │   ├── helpers
+│   │   │   ├── _constants.scss
+│   │   │   ├── _functions.scss
+│   │   │   ├── _index.scss
+│   │   │   ├── _media.scss
+│   │   │   └── _mixins.scss
+│   │   ├── vendor
+│   │   │   └── normalize.css
+│   │   ├── _fonts.scss
+│   │   ├── _settings.scss
+│   │   ├── _vars.scss
+│   │   └── main.scss
+│   ├── astro.svg
+│   └── background.svg
+├── components
+│   ├── Burger
+│   │   ├── _burger.scss
+│   │   └── Burger.astro
+│   ├── Header
+│   │   ├── _header.scss
+│   │   └── Header.astro
+│   ├── MainHero
+│   │   ├── _main-hero.scss
+│   │   └── MainHero.astro
+│   ├── Nav
+│   │   ├── _nav.scss
+│   │   └── Nav.astro
+│   ├── Search
+│   │   ├── _search.scss
+│   │   ├── Search.astro
+│   │   └── search.js
+│   ├── SpriteGenerator
+│   │   ├── MyIcon.astro
+│   │   └── SpriteGenerator.astro
+│   └── Head.astro
+├── data
+│   ├── data.js
+│   └── images.js
+├── fonts
+│   ├── Roboto-Medium.woff2
+│   ├── Roboto-Regular.woff2
+│   └── Ubuntu-Light.woff2
+├── layouts
+│   └── Layout.astro
+└── pages
+    └── index.astro

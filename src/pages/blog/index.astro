@@ -1,0 +1,68 @@
+---
+import "./_blog.scss";
+import MyIcon from "@/components/SpriteGenerator/MyIcon.astro";
+import SpriteGenerator from "@/components/SpriteGenerator/SpriteGenerator.astro";
+import Layout from "@/layouts/Layout.astro";
+import fs from 'node:fs';
+import path from 'node:path';
+
+const { label = "Блог" } = Astro.props;
+
+// Находим файл строго в корневой папке во время выполнения build
+const filePath = path.resolve(process.cwd(), 'posts.json');
+let allPosts: any[] = [];
+
+try {
+  if (fs.existsSync(filePath)) {
+    const jsonRaw = fs.readFileSync(filePath, 'utf-8').trim();
+    if (jsonRaw && !jsonRaw.startsWith('<')) {
+      const parsed = JSON.parse(jsonRaw);
+      if (Array.isArray(parsed)) {
+        allPosts = parsed;
+      }
+    }
+  }
+} catch (error) {
+  console.error("[Astro Build] Ошибка чтения posts.json на главной блога:", error);
+}
+---
+
+<Layout title="Simple | Блог" desc="Страница блога">
+  <section class="blog">
+    <div class="blog__container container">
+      <h1 class="blog__title title--h1">
+        {label}
+      </h1>
+      <ul class="blog__list">
+        {
+          allPosts.length === 0 ? (
+            <p style="color: red; text-align: center; font-weight: bold; width: 100%;">
+              Статей из WordPress не найдено.
+            </p>
+          ) : (
+            allPosts.map((post: any) => {
+              const title = post.title?.rendered || 'Без названия';
+              const body = post.excerpt?.rendered ? post.excerpt.rendered.replace(/<[^>]*>/g, '').trim() : ''; 
+              const id = post.id;
+
+              return (
+                <li class="blog__item">
+                  <article class="blog-article">
+                    <h3 class="blog-article__title" set:html={title} />
+                    {body && <p class="blog-article__desc">{body}</p>}
+                    <a href={`/blog/${id}`} class="blog-article__link">
+                      Читать post
+                      <MyIcon name="arrow" />
+                    </a>
+                  </article>
+                </li>
+              );
+            })
+          )
+        }
+      </ul>
+    </div>
+  </section>
+
+  <SpriteGenerator />
+</Layout>

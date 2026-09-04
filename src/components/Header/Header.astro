@@ -1,0 +1,59 @@
+---
+//@ts-nocheck
+// import './_header.scss';
+import MyIcon from "@/components/SpriteGenerator/MyIcon.astro";
+import Nav from "@/components/Nav/Nav.astro";
+import Search from "@/components/Search/Search.astro";
+import Burger from "@/components/Burger/Burger.astro";
+const currentPath = Astro.url.pathname;
+const isHome = Astro.url.pathname === "/";
+---
+
+<header class="header">
+  <div class="header__container container">
+    {
+      isHome ? (
+        <span class="logo header__logo">
+          <img src="/logo.svg" alt="simple" />
+        </span>
+      ) : (
+        <a href="/" class="logo header__logo">
+          <img src="/logo.svg" alt="simple" />
+        </a>
+      )
+    }
+    <Nav class="header-nav" />
+    
+    <div class="header__action">
+        <div class="header__search-wrapper">
+          <button
+          type="button"
+          class="header__action-btn header__action-btn--search"
+          aria-label="Открыть поиск"
+          title="Открыть поиск"
+          aria-controls="search-form"
+          aria-expanded="false"
+          >
+          <MyIcon name="search" aria-hidden="true" />
+        </button>
+
+        <Search class="header__search" />
+      </div>
+      <a
+      href="/login/"
+      class="header__action-btn header__action-btn--login"
+      aria-label="Войти в личный кабинет"
+      title="Войти в личный кабинет"
+      >
+      <MyIcon name="login" aria-hidden="true" />
+      </a>
+    </div>
+    
+    <Burger class="header__burger" />
+  </div>
+  <Nav class="header-nav header-nav--mobile" navLabel="Mобильное меню" />
+</header>
+
+<style lang="scss" is:global>
+  @import 'header.scss';
+</style>

@@ -1,0 +1,19 @@
+---
+import "@/assets/scss/main.scss";
+import Brands from "@/components/Brands/Brands.astro";
+import MainHero from "@/components/MainHero/MainHero.astro";
+import Products from "@/components/Products/Products.astro";
+import Promo from "@/components/Promo/Promo.astro";
+import Result from "@/components/Result/Result.astro";
+import MyIcon from "@/components/SpriteGenerator/MyIcon.astro";
+import SpriteGenerator from "@/components/SpriteGenerator/SpriteGenerator.astro";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Simple | Главная" desc="Главная станица сайта Simple">
+  <MainHero />
+  <Result/>
+  <Products/>
+  <Brands/>
+  <Promo/>
+</Layout>

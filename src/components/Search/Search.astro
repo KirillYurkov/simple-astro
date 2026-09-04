@@ -1,0 +1,31 @@
+---
+//Чтобы передать в компонент доп класс нужно создать его переменную
+import './_search.scss';
+const { class: additionClass = "" } = Astro.props;
+---
+
+<form action="#" class={`search ${additionClass} search--hidden`} id='search-form'>
+  <label for="search-field" class="search__label"></label>
+  <input
+    type="search"
+    name="search"
+    placeholder="Найти"
+    id="search-field"
+    class=`search__input header__search-input search--hidden`
+    />
+    <button
+      type="button"
+      class="btn search__reset-btn header__search-reset"
+      aria-label="Очистить поиск"
+      title="Очистить поиск"
+    >
+      <span class="search__reset-icon"></span>
+    </button>
+</form>
+<!-- <style lang="scss" is:global>
+  @import "./search";
+</style> -->
+
+<script>
+  import "./search.js";
+</script>

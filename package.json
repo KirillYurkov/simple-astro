@@ -1,0 +1,44 @@
+{
+  "name": "",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "fonts": "node ttf-to-woff2",
+    "images": "node image-to-webp"
+  },
+  "dependencies": {
+    "astro": "^6.4.4",
+    "fslightbox": "^3.7.4",
+    "graph-modal": "^1.0.7",
+    "inputmask": "^5.0.9",
+    "js-cookie": "^2.2.1",
+    "just-validate": "^4.3.0",
+    "nouislider": "^15.8.1",
+    "resize-observer-polyfill": "^1.5.1",
+    "simplebar": "^6.3.2",
+    "strapi-community-astro-loader": "^2.0.6",
+    "swiper": "^7.0.0"
+  },
+  "devDependencies": {
+    "astro-icon": "^1.1.5",
+    "astro-relative-links": "^0.4.2",
+    "autoprefixer": "^10.5.4",
+    "cross-env": "^10.0.0",
+    "postcss-import": "^16.1.1",
+    "postcss-preset-env": "^11.3.2",
+    "prettier": "^3.6.2",
+    "sass": "^1.91.0",
+    "sharp": "^0.34.5",
+    "stylelint": "^16.24.0",
+    "stylelint-config-standard-scss": "^15.0.1",
+    "stylelint-order": "^7.0.0",
+    "ttf2woff2": "^8.0.1"
+  }
+}

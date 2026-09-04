@@ -1,0 +1,38 @@
+---
+// src/components/Ui/SpriteProvider.astro
+const icons = import.meta.glob('/src/assets/icons/**/*.svg', { 
+  query: '?raw', 
+  import: 'default' 
+});
+
+const symbols = await Promise.all(
+  Object.entries(icons).map(async ([id, getHtml]) => {
+    const name = id.replace('/src/assets/icons/', '').replace('.svg', '');
+    let rawSvg = await getHtml() as string;
+
+    if (!name.startsWith('color-') && !name.includes('/color-')) {
+      rawSvg = rawSvg.replace(/style="[^"]+"/g, '');
+
+      // 1. ИЩЕМ И ЗАМЕНЯЕМ ЦВЕТ КРУГА/ПРАМОУГОЛЬНИКА (ФОНА)
+      // Находим любой тег circle или rect, у которого внутри есть fill="цвет", 
+      // и принудительно меняем этот fill на нашу переменную --bg-color
+      rawSvg = rawSvg.replace(/<(circle|rect)\b([^>]*?)\bfill="([^"]+)"/g, '<$1$2 fill="var(--bg-color, $3)"');
+
+      // 2. ИЩЕМ И ЗАМЕНЯЕМ ЦВЕТ КРЕСТИКА/ЛИНИЙ (КОНТУРА)
+      rawSvg = rawSvg.replace(/<(path|line|polyline)\b([^>]*?)\bfill="([^"|none]+)"/g, '<$1$2 fill="var(--main-color, currentColor)"');
+      rawSvg = rawSvg.replace(/<(path|line|polyline)\b([^>]*?)\bstroke="([^"|none]+)"/g, '<$1$2 stroke="var(--main-color, currentColor)"');
+
+      // Дополнительный сброс для старых иконок
+      rawSvg = rawSvg.replace(/fill="(?!none|currentColor|var)[^"]+"/g, 'fill="currentColor"');
+    }
+
+
+
+    return rawSvg.replace('<svg', `<symbol id="icon-${name}"`).replace('</svg>', '</symbol>');
+  })
+);
+---
+
+<svg xmlns="http://w3.org" style="display: none !important;">
+  <Fragment set:html={symbols.join('\n')} />
+</svg>

@@ -1,0 +1,215 @@
+@use "helpers/mixins" as *;
+
+:where(*,
+*::before,
+*::after) {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font1);
+  background-color: var(--bg-color);
+  color: var(--primary);
+  display: flex;
+  flex-direction: column;
+}
+header{
+  flex-shrink: 0;
+}
+main{
+  flex-grow:1;
+  min-height: 100vh;
+}
+footer{
+  flex-shrink: 0;
+}
+/* ТЕХНИЧЕСКИЕ КЛАССЫ СЕТКИ */
+.wrapper {
+  max-width: 1470px;
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+:where(.container){
+  max-width: 1110px;
+  padding: 0 15px;
+  margin: 0 auto;
+}
+
+
+li {
+  list-style-type: none;
+}
+
+/* Базовые стили для всех ссылок на сайте */
+:where(a) {
+  text-decoration: none;
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease;
+    @include states(var(--primary),transparent,var(--hover),transparent,var(--primary),var(--focus),var(--active),transparent,true);
+}
+
+img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+:where(button) {
+  padding: 0;
+  border: none;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* КНОПКИ СИСТЕМЫ */
+:where(.btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #7875fe;
+  padding: 20px 89px;
+  transition:
+    color 0.3s,
+    background 0.3s;
+  @include states(
+    var(--primary),
+    transparent,
+    #fff,
+    var(--hover),
+    var(--hover),
+    var(--focus),
+    #fff,
+    var(--active),
+    true
+  );
+}
+  :where(.btn--primary) {
+    display: inline-block;
+    font-family: var(--font2);
+    background-color: var(--primary);
+    color: #fff;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 156%;
+    border-radius: 5px;
+    padding: 15px 35px;
+    transition:
+      color 0.3s,
+      background-color 0.3s;
+    @include states(
+      var(--primary),
+      transparent,
+      #fff,
+      var(--hover),
+      var(--hover),
+      var(--focus),
+      #fff,
+      var(--active),
+      true
+    );
+  }
+
+  :where(.btn--second) {
+    display: inline-block;
+    color: var(--primary);
+    background-color: #fff;
+    font-family: var(--font2);
+    border: 3px solid var(--primary);
+    border-radius: 5px;
+    padding: 17px 37px;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 100%;
+    transition: all 0.2s ease-in-out;
+
+    @include hover {
+      color: var(--hover);
+      border-color: var(--hover);
+    }
+
+    &:focus-visible {
+      color: var(--hover);
+      border-color: var(--hover);
+      outline: 3px solid var(--focus);
+    }
+
+    &:active {
+      color: var(--active);
+      border-color: var(--active);
+    }
+  }
+
+/* ТИПОГРАФИКА (ЗАГОЛОВКИ И ОПИСАНИЯ) */
+.title {
+  :where(&--h1) {
+    font-family: var(--font1);
+    font-weight: 400;
+    line-height: 100%;
+    color: var(--title-h1);
+    @include fluid-text(60, 30);
+  }
+  :where(&--h2) {
+    font-family: var(--font1);
+    font-weight: 400;
+    @include fluid-text(40, 24);
+    line-height: 100%;
+    color: var(--title-h2);
+  }
+  :where(&--h3) {
+    font-family: var(--font1);
+    font-weight: 400;
+    @include fluid-text(30, 24);
+    line-height: 150%;
+    color: var(--title-h3);
+  }
+}
+
+:where(.subtitle) {
+font-family: var(--font1);
+font-weight: 400;
+font-size: 14px;
+color: #b5b5bd;
+}
+
+.desc {
+  :where(&){
+  font-family: var(--font1);
+  font-weight: 400;
+  @include fluid-text(18, 16);
+  line-height: 170%;
+  color: #85859b;
+  }
+  :where(&--h1) {
+    font-family: var(--font2);
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 156%;
+    color: #4e616d;
+  }
+  :where(&--h2) {
+    font-family: var(--font2);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 156%;
+    color: #4e616d;
+  }
+  :where(&--h3) {
+    font-family: var(--font2);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 156%;
+    color: #4e616d;
+  }
+}
+.visually-hidden {
+  @include visually-hidden();
+}

@@ -1,0 +1,28 @@
+---
+import './_brands.scss';
+const brands = [
+    {src:'/brand1.svg',alt:'brand1'},
+    {src:'/brand2.svg',alt:'brand2'},
+    {src:'/brand3.svg',alt:'brand3'},
+    {src:'/brand4.svg',alt:'brand4'},
+];
+
+---
+
+<section class="brands">
+    <div class="brands__container container">
+
+        <h2 class="brands__title" hidden>Brands</h2>
+        <ul class="brands__list">
+            {
+                brands.map(({src,alt}) => {
+                    return (
+                        <li class="brands__item">
+            <img src={src} alt={alt}/>
+          </li>
+        );
+    })
+}
+</ul>
+</div>
+</section>
